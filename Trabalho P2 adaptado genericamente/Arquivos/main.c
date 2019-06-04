@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #define TAM 50
 
 typedef struct Demonios{
@@ -26,8 +27,9 @@ void leranjos (Anjos *Anjos){
 	int i, j, n=0, num_cidades = 0, num_habitantes = 0;
 	float calcforcacidades = 0.0;
 	fscanf(arq, "%i", &num_cidades);
+	printf("ANJOS\n");
 	for(i=0; i<num_cidades; i++){
-		fscanf(arq,"\t%s\t%i",&nome_cidade, &num_habitantes);
+		fscanf(arq,"\t%s\t%i",nome_cidade, &num_habitantes);
 		//como no arquivo existe um tab entre as informações uso o \t psra fazer essa leitura
 		for(j=0; j<num_habitantes; j++){
 			fscanf(arq,"%s %f %f %f", anjo.nome,&anjo.capfly,&anjo.peso,&anjo.altura);
@@ -43,54 +45,64 @@ void leranjos (Anjos *Anjos){
     //colocar essa mesma logica nas demais funcoes
 }
 
-/*
+
 void lerdemonios (Demonios *Demonios){
 	FILE* arq;
 	arq = fopen("demonios.txt", "r");
-	int i,j,k, num_cidades = 0;
+	int i,j, num_cidades = 0, num_habitantes = 0, n = 0;
+	char nome_cidade[50];
+	float calcforcacidades  = 0.0, dens = 0.0;
+	struct Demonios demonio;
+	
 	fscanf(arq, "%i", &num_cidades);
-	fscanf(arq, "%s %i", Demonios[0].cidade, &Demonios[0].numhab);
-	for(i=1; i<=Demonios[0].numhab; i++){
-		fscanf(arq,"%s %f %f", Demonios[i].nome,
-		                       &Demonios[i].escuridao,
-                               &Demonios[i].visao);
+	//fscanf(arq,"\t%s\t%i",nome_cidade, &num_habitantes);
+	//fscanf(arq, "%s %i", Demonios[0].cidade, &Demonios[0].numhab);
+	printf("\n\nDEMONIOS\n");
+	for(i=0; i<num_cidades; i++){
+		fscanf(arq,"\t%s\t%i",nome_cidade, &num_habitantes);
+		
+		for(j=0; j<num_habitantes; j++){
+			fscanf(arq,"%s %f %f", demonio.nome,
+		                       &demonio.escuridao,
+                               &demonio.visao);
+
+			dens = (demonio.escuridao - (demonio.visao/2));				   
+			//calcforcacidades = calcforcacidades + (pow(demonio.escuridao - (demonio.visao/2)), 2);	
+			calcforcacidades = calcforcacidades + (pow(dens,2));
+			Demonios[n] = demonio;
+			n++;				   
+		}
+		printf("\nA cidade %s tem um total de foca de: %.2f",nome_cidade, calcforcacidades );
+		calcforcacidades = 0.0;
+	
 	}
-	fscanf(arq, "%s %i", Demonios[i].cidade, &Demonios[i].numhab);
-	j=i;
-	i++;
-	k=Demonios[j].numhab;
-    for(k==Demonios[j].numhab; k<=Demonios[j].numhab; i++){
-		fscanf(arq,"%s %f %f", Demonios[i].nome,
-		                       &Demonios[i].escuridao,
-                               &Demonios[i].visao);
-        k++;
-	}
-	fscanf(arq, "%s %i", Demonios[i].cidade, &Demonios[i].numhab);
-	j=i;
-	i++;
-	k=Demonios[j].numhab;
-    for(k==Demonios[j].numhab; k<=Demonios[j].numhab; i++){
-		fscanf(arq,"%s %f %f", Demonios[i].nome,
-		                       &Demonios[i].escuridao,
-                               &Demonios[i].visao);
-        k++;
-	}
+	printf("\n\n");
 	fclose(arq);
 }//Colocar aqui dentro para ler os arquivos
 
-void lerhumanos (Humanos *Humanos){
+void lerhumanos (Humanos *humanos){
 	FILE* arq;
 	arq = fopen("humanos.txt", "r");
-	int i, num_cidades = 0;
+	int i, num_cidades = 0, num_habitantes = 0;
+	char nome_cidade[50];
+	float calcforcacidades = 0.0;
+	
 	fscanf(arq, "%i", &num_cidades);
-	fscanf(arq, "%s %i", Humanos[0].cidade, &Humanos[0].numhab);
-	for(i=1; i<=3; i++){
-		fscanf(arq,"%s %f", Humanos[i].nome,
-		                    &Humanos[i].forca);
+	//fscanf(arq, "%s %i", Humanos[0].cidade, &Humanos[0].numhab);
+	fscanf(arq,"\t%s\t%i",nome_cidade, &num_habitantes);
+	printf("\n\nHUMANOS\n");
+	for(i=0; i<num_habitantes; i++){
+		fscanf(arq,"%s %f", humanos[i].nome,
+		                    &humanos[i].forca);
+	
+		calcforcacidades = calcforcacidades + (humanos[i].forca);
 	}
+	printf("\nA cidade %s tem um total de foca de: %.2f",nome_cidade, calcforcacidades);
+	//calcforcacidades = 0.0;
+	
 	fclose(arq);
 }//Colocar aqui dentro para ler os arquivos
-*/
+
 /*
 void printaranjos (Anjos *anjos){
 	int i, j, k;
@@ -166,12 +178,17 @@ int main(){
   Anjos *anjos = (Anjos*)calloc(TAM,sizeof(Anjos));
   leranjos(anjos);
   //lerdemonios(demonios);
-  //lerhumanos(humanos);
-  printf("==================Anjos===================");
+  lerhumanos(humanos);
+  lerdemonios(demonios);
+  
+  //printf("==================Anjos===================");
+   //printf("\n\n");
   //printaranjos(anjos);
-  printf("==================Demonios===================");
+  //printf("==================Humanos===================");
+   //printf("\n\n");
   //printardemonios(demonios);
-  printf("==================Humanos===================");
+  //printf("==================Demonios===================");
+   //printf("\n\n");
   //printarhumanos(humanos);
   return(0);
 }
