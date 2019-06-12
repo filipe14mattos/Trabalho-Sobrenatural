@@ -36,7 +36,7 @@ void lerAnjos (Anjos *Anjos, Mundo *m, Forcas *f, int *n){
 	struct Anjos anjo;
 	char nome_cidade[50];
 	int i, j, num_cidades = 0, num_habitantes = 0, k = 0;
-	float calcforca = 0.0, calccind = 0.0;
+	float calcforca = 0.0;
 	fscanf(arq, "%i", &num_cidades);
 	printf("ANJOS\n");
 	for(i = 0; i < num_cidades; i++){
@@ -45,17 +45,15 @@ void lerAnjos (Anjos *Anjos, Mundo *m, Forcas *f, int *n){
 		{
 			fscanf(arq, "%s %f %f %f", anjo.nome, &anjo.capfly, &anjo.peso, &anjo.altura);
 			calcforca += (anjo.capfly * (anjo.altura * anjo.altura) * anjo.peso);
-			calccind = (anjo.capfly * (anjo.altura * anjo.altura) * anjo.peso);
-			f[*n].forca = calccind;
+			f[*n].forca = (anjo.capfly * (anjo.altura * anjo.altura) * anjo.peso);
 			Anjos[k] = anjo;
 			strcpy(f[*n].nome, Anjos[k].nome);
 			(*n)++;
 			k++;
-			calccind = 0.0;
 		}
         m->forcaanj += calcforca;
 		m->numhabanj += num_habitantes;
-		printf("\nA cidade %s tem um total de foca de: %.2f", nome_cidade, calcforca );
+		printf("\nA cidade %s tem um total de forca de: %.2f\n", nome_cidade, calcforca );
 		calcforca = 0.0;
 	}
 	fclose(arq);
@@ -68,10 +66,10 @@ void lerDemonios (Demonios *Demonios, Mundo *m, Forcas *f, int *n){
 	m->forcadem = 0.0;
 	int i, j, num_cidades = 0, num_habitantes = 0,k = 0;
 	char nome_cidade[50];
-	float subforca = 0.0, calcforcas = 0.0, calccind = 0.0;
+	float subforca = 0.0, calcforcas = 0.0;
 	struct Demonios demonio;
 	fscanf(arq, "%i", &num_cidades);
-	printf("\n\nDEMONIOS\n");
+	printf("\nDEMONIOS\n");
 	for(i = 0; i < num_cidades; i++){
 		fscanf(arq, "%s %i", nome_cidade, &num_habitantes);
 		for(j = 0; j < num_habitantes; j++){
@@ -80,16 +78,14 @@ void lerDemonios (Demonios *Demonios, Mundo *m, Forcas *f, int *n){
 				                    &demonio.visao);
 			subforca = (demonio.escuridao - (demonio.visao / 2));
 			calcforcas += (pow(subforca, 2));
-			calccind = (pow(subforca, 2));
-			f[*n].forca = calccind;
+			f[*n].forca = (pow(subforca, 2));
 			Demonios[k] = demonio;
 			strcpy(f[*n].nome, Demonios[k].nome);
 			(*n)++;
 			k++;
-			calccind = 0.0;
 		}
 		m->forcadem += calcforcas;
-		printf("\nA cidade %s tem um total de foca de: %.2f", nome_cidade, calcforcas );
+		printf("\nA cidade %s tem um total de forca de: %.2f\n", nome_cidade, calcforcas );
 		calcforcas = 0.0;
 		m->numhabdem += num_habitantes;
 	}
@@ -104,10 +100,10 @@ void lerHumanos (Humanos *Humanos, Mundo *m, Forcas *f, int *n){
 	m->forcahum = 0.0;
 	int i, j, num_cidades = 0, num_habitantes = 0, k = 0;
 	char nome_cidade[50];
-	float calcforcas = 0.0, calccind = 0;
+	float calcforcas = 0.0;
 	struct Humanos human;
 	fscanf(arq, "%i", &num_cidades);
-	printf("\n\nHUMANOS\n");
+	printf("\nHUMANOS\n");
 	for(i = 0; i < num_cidades; i++){
 		fscanf(arq, "%s %i", nome_cidade, &num_habitantes);
 		for(j = 0; j < num_habitantes; j++){
@@ -115,16 +111,14 @@ void lerHumanos (Humanos *Humanos, Mundo *m, Forcas *f, int *n){
   	   	   	                     &human.forca);
 			calcforcas += human.forca;
 			m->forcahum += human.forca;
-			calccind = human.forca;
-			f[*n].forca = calccind;
+			f[*n].forca = human.forca;
 			Humanos[k] = human;
 			strcpy(f[*n].nome, Humanos[k].nome);
 			(*n)++;
 			k++;
-			calccind = 0.0;
 		}
 		m->numhabhum += num_habitantes;
-		printf("\nA cidade %s tem um total de foca de: %.2f", nome_cidade, calcforcas);
+		printf("\nA cidade %s tem um total de forca de: %.2f\n", nome_cidade, calcforcas);
 		calcforcas = 0.0;
 	}
 	fclose(arq);
@@ -202,14 +196,14 @@ void ordenacao(Forcas *f, int qtd){
 void escreverVetor(Forcas *f, int n){
 	int i;
 	float menor = f[0].forca,maior = f[n].forca;
-	printf("O(s) individuo(s) com a(s) menor(es) forca(s) sao:\n ");
+	printf("O(s) individuo(s) com a(s) menor(es) forca(s) sao:\n");
 	printf("%s\n", f[0].nome);
 	for(i = 1;i<n;i++){
 		if(f[i].forca == menor){
 			printf("%s\n", f[i].nome);
 		}
 	  }
-	printf("O(s) individuo(s) com a(s) maior(es) forca(s) sao:\n ");
+	printf("O(s) individuo(s) com a(s) maior(es) forca(s) sao:\n");
 	printf("%s\n", f[n].nome);
 	for(i = 0;i<n-1;i++){
 		if(f[i].forca == maior){
@@ -260,12 +254,11 @@ int main(){
 	somaAanjo(anjos, mundo, &calcA);
 	somaAhumano(humanos, mundo, &calcA);
 	somaAdemonios(demonios, mundo, &calcA);
-	printf("\nA forca dos individuos com duas letras a no nome e: %.2f\n\n", calcA);
+	printf("A forca dos individuos com duas letras a no nome e: %.2f\n\n", calcA);
 	free(demonios);
 	free(humanos);
 	free(anjos);
 	ordenacao(forcas, n);
-	//escreverVetor1(forcas, n);
 	escreverVetor(forcas, n-1);
 	free(forcas);
 	crescente(&mundo);
